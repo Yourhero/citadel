@@ -16,7 +16,10 @@ class Player(Entity):
     self.health = 100
     self.name   = name
 
-  def update():
+
+  def update(self):
+    self.rect.x += self.vel_x
+    self.rect.y += self.vel_y
     if self.health <= 0:
       die()
 
