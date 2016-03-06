@@ -14,7 +14,7 @@ class InputHandler():
         elif event.key == pygame.K_a:
           player.vel_x = -15
         else:
-          player.vel_y = 0 
+          player.vel_x = 0 
         if event.key == pygame.K_w:
           player.vel_y = -15
         elif event.key == pygame.K_s:
