@@ -1,3 +1,5 @@
+import pygame
+
 class Projectile(Entity):
     List = pygame.sprite.Group() 
     active_projectiles = []
