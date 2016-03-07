@@ -24,7 +24,7 @@ def run():
     pass
 
   client.send(['login', name, avatar], None)
-  if client.receive(False)[0] == "success":
+  if client.receive(True)[0] == "success":
     connected = True
     clock = pygame.time.Clock()
 
@@ -34,7 +34,7 @@ def run():
     player.client_update()
     new_pos = [player.rect.x, player.rect.y]
     if old_pos[0] != new_pos[0] or old_pos[1] != new_pos[1]:
-      client.send(['update', name, player.rect.x, player.rect.y], None)
+      client.send(['update', name, player.rect.x, player.rect.y, player.vel_x, player.vel_y], None)
       state = client.receive(True) # false = non-blocking
       print "The state: " + str(state)
       if state[0] == 'move':

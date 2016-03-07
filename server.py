@@ -32,11 +32,12 @@ class CitadelServer(MastermindServerTCP):
     del self.players[username]
     self.mutex.release()
 
-  def update_player_position(self, username, x, y):
+  def update_player_position(self, username, x, y, x_vel, y_vel):
     self.mutex.acquire()
     self.players[username]['x_pos'] = x
     self.players[username]['y_pos'] = y
-    print "Player: " + username + " position updated - X: " + str(x) + " - Y: " + str(y)
+    print "Player: " + username + " pos X: " + str(x) + " Y: " + str(y) + " Vel X: " + str(x_vel) + " Y: " + str(y_vel)
+    print " "
     self.mutex.release()
 
   def callback_connect(self):
@@ -64,7 +65,9 @@ class CitadelServer(MastermindServerTCP):
     elif cmd == "update":
       x_pos = data[2]
       y_pos = data[3]
-      self.update_player_position(username, x_pos, y_pos)
+      x_vel = data[4]
+      y_vel = data[5]
+      self.update_player_position(username, x_pos, y_pos, x_vel, y_vel)
       reply = ["move", self.players[username]['x_pos'], self.players[username]['y_pos']] 
     self.callback_client_send(connection_object, reply)
 
