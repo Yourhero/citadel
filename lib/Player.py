@@ -9,8 +9,8 @@ class Player(Entity):
     for player in Player.List:
       player.update()
 
-  def __init__(self, SCREENWIDTH, SCREENHEIGHT, image, name):
-    Entity.__init__(self, SCREENWIDTH/2, SCREENHEIGHT/2, image)
+  def __init__(self, x, y, image, name):
+    Entity.__init__(self, x, y, image)
     Player.List.add(self)
     self.health = 100
     self.name   = name
@@ -19,8 +19,8 @@ class Player(Entity):
     self.max_speed = 20
     self.vel_gain = 5
     self.vel_decay = 2
-    self.SCREENHEIGHT = SCREENHEIGHT
-    self.SCREENWIDTH = SCREENWIDTH
+    self.SCREENHEIGHT = y*2
+    self.SCREENWIDTH = x*2
     
     
   def client_update(self):
