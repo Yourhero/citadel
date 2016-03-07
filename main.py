@@ -27,6 +27,7 @@ def run():
   if client.receive(True)[0] == "success":
     connected = True
   clock = pygame.time.Clock()
+  initialize_players()
 
   while connected:
     ## LOCAL CLIENT LOGIC ##
@@ -42,7 +43,8 @@ def run():
       client.send(['sync', username])
     
     state = client.receive(True) # true = blocking
-    print "State: " + str(state)
+    #print "State: " + str(state)
+
 
     if isinstance(state, list) and state[0] == "new_player":
       # make new player
@@ -51,12 +53,14 @@ def run():
       create = False
       for player in Player.List:
         if new_player_name != player.name:
+          print "Creating new player " + new_player_name
           Player(nstate['x_pos'], nstate['y_pos'], nstate['avatar'], new_player_name)
         else:
           print "Skipping creating ourselves twice..."
-    else:
-      # update player states as normal
-      pass # temp
+    
+    if isinstance(state, dict):
+      for player in Player.list:
+        player.server_update(state[player]['x_pos'], state[player['y_pos']])
 
     ## LOCAL CLIENT DRAW ##
     screen.fill(WHITE)    
@@ -68,6 +72,8 @@ def run():
 
   client.disconnect()
   pygame.quit()
+
+def initialize_players():
 
 def get_player_name():
   named = False
