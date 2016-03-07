@@ -27,7 +27,9 @@ def run():
   if client.receive(True)[0] == "success":
     connected = True
   clock = pygame.time.Clock()
-  initialize_players()
+  s = client.receive(True)
+  if isinstance(s, dict):
+    initialize_players(s)
 
   while connected:
     ## LOCAL CLIENT LOGIC ##
@@ -73,7 +75,17 @@ def run():
   client.disconnect()
   pygame.quit()
 
-def initialize_players():
+def initialize_players(state):
+  known = []
+  new = []
+  for player in Player.List:
+    known.append(player.name)
+  for player in state:
+     if player not in known:
+        new.append(player)
+  for player in new:
+    Player(state['x_pos'], state['y_pos'], state['avater'], player)
+
 
 def get_player_name():
   named = False
