@@ -15,8 +15,8 @@ level = Level(1,'test',SCREENHEIGHT,SCREENWIDTH)
 def run():
 
   avatar = random.choice(glob.glob(AVATARS + "*.png"))
-  name = get_player_name()
-  player = Player(SCREENWIDTH/2, SCREENHEIGHT/2, avatar, name)
+  username = get_player_name()
+  my_player = Player(SCREENWIDTH/2, SCREENHEIGHT/2, avatar, username)
   client = MastermindClientTCP(5.0, 10.0) # connection timeout, receive timeout
 
   try:
@@ -25,26 +25,50 @@ def run():
     # server not up?
     pass
 
-  client.send(['login', name, avatar], None)
+  client.send(['login', username, avatar], None)
   if client.receive(True)[0] == "success":
     connected = True
-    clock = pygame.time.Clock()
+  clock = pygame.time.Clock()
+  s = client.receive(True)
+  if isinstance(s, dict):
+    initialize_players(s)
 
   while connected:
-    InputHandler.handle_keyboard(player)
-    old_pos = [player.rect.x, player.rect.y]
-    player.client_update()
-    new_pos = [player.rect.x, player.rect.y]
-    if old_pos[0] != new_pos[0] or old_pos[1] != new_pos[1]:
-      client.send(['update', name, player.rect.x, player.rect.y, player.vel_x, player.vel_y], None)
-      state = client.receive(True) # false = non-blocking
-      print "The state: " + str(state)
-      if state[0] == 'move':
-        player.server_update(state[1], state[2])
-    else: # player hasn't moved
-      pass
+    ## LOCAL CLIENT LOGIC ##
+    InputHandler.handle_keyboard(my_player)
+    old_pos = [my_player.rect.x, my_player.rect.y]
+    my_player.client_update()
+    new_pos = [my_player.rect.x, my_player.rect.y]
+
+    ## CLIENT / SERVER INTERACTION ##
+    if old_pos[0] != new_pos[0] or old_pos[1] != new_pos[1]: # if we've moved
+      client.send(['update', username, my_player.rect.x, my_player.rect.y, my_player.vel_x, my_player.vel_y], None)
+    else: # haven't moved
+      client.send(['sync', username])
+    
+    state = client.receive(True) # true = blocking
+    #print "State: " + str(state)
+
+
+    if isinstance(state, list) and state[0] == "new_player":
+      # make new player
+      new_player_name = state[1]
+      nstate = state[2]
+      create = False
+      for player in Player.List:
+        if new_player_name != player.name:
+          print "Creating new player " + new_player_name
+          Player(nstate['x_pos'], nstate['y_pos'], nstate['avatar'], new_player_name)
+        else:
+          print "Skipping creating ourselves twice..."
+    
+    if isinstance(state, dict):
+      for player in Player.List:
+        player.server_update(state[player.name]['x_pos'], state[player.name]['y_pos'])
+
+    ## LOCAL CLIENT DRAW ##
     screen.fill(WHITE)    
-    display_text(screen, 28, "echo: " + name, 10, 10) # Echo user input
+    display_text(screen, 28, "Logged in as: " + username, 85, 30) # Echo user input
     display_text(screen, 28, "Citadel 0.0.1a", SCREENWIDTH  - 75, SCREENHEIGHT) # Version caption
     Entity.List.draw(screen)
     pygame.display.flip()
@@ -53,9 +77,21 @@ def run():
   client.disconnect()
   pygame.quit()
 
+def initialize_players(state):
+  known = []
+  new = []
+  for player in Player.List:
+    known.append(player.name)
+  for player in state:
+     if player not in known:
+        new.append(player)
+  for player in new:
+    Player(state['x_pos'], state['y_pos'], state['avater'], player)
+
+
 def get_player_name():
   named = False
-  txt_input = eztext.Input(maxlength=32, color=(140, 20, 20), prompt='Choose a name: ')
+  txt_input = eztext.Input(maxlength=32, color=(140, 20, 20), prompt='Choose a username: ')
   while not named:
     events = pygame.event.get()
     for event in events:
@@ -65,11 +101,11 @@ def get_player_name():
       elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RETURN:
           named = True
-    name = txt_input.value
+    username = txt_input.value
     txt_input.update(events)
     txt_input.draw(screen)
     pygame.display.flip()
-  return name
+  return username
 
 def display_text(screen, size, text, centerx, centery):
   font = pygame.font.Font(None, size)
