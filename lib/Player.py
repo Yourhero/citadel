@@ -4,7 +4,6 @@ from lib.Entity import *
 class Player(Entity):
 
   List = pygame.sprite.Group()
-
   @staticmethod
   def update_all():
     for player in Player.List:
@@ -15,9 +14,12 @@ class Player(Entity):
     Player.List.add(self)
     self.health = 100
     self.name   = name
-
-
-  def client_update(self):
+    self.face = 2
+    self.max_speed = 20
+    self.vel_gain = 6
+    self.vel_decay = 3
+    
+  def update(self):
     self.rect.x += self.vel_x
     self.rect.y += self.vel_y
     if self.face == 0:
@@ -42,10 +44,21 @@ class Player(Entity):
     if self.health <= 0:
       die()
 
-  def server_update(self, x, y):
-    self.rect.x = x
-    self.rect.y = y
-
   def destroy():
     classes.Player.List.remove(self)
     del self
+  
+  def decay(self, vector):
+    if vector == 'x':
+      self.vel_x = 0
+      #if self.vel_x > 0:
+       # self.vel_x -= self.vel_decay
+      #elif self.vel_x < 0:
+       # self.vel_x += self.vel_decay
+    elif vector == 'y':
+      self.vel_y = 0
+      #if self.vel_y > 0:
+       # self.vel_y -= self.vel_decay
+      #elif self.vel_y < 0:
+       # self.vel_y += self.vel_decay
+        
