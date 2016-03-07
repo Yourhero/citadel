@@ -22,15 +22,15 @@ class Player(Entity):
   def client_update(self):
     self.rect.x += self.vel_x
     self.rect.y += self.vel_y
-    align_image_with_direction()
+    self.align_image_with_direction()
 
   def server_update(self, x, y):
-    self.rect.x += self.vel_x
-    self.rect.y += self.vel_y
-    align_image_with_direction()
+    self.rect.x += x
+    self.rect.y += y
+    self.align_image_with_direction()
    
   def align_image_with_direction(self):
-     if self.face == 0:
+    if self.face == 0:
       self.image = pygame.transform.rotate(self.base_image, 90)
     elif self.face == 1:
       self.image = pygame.transform.rotate(self.base_image, 45)
