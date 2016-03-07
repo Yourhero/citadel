@@ -21,45 +21,53 @@ class InputHandler():
     keys = pygame.key.get_pressed()
     
     if keys[pygame.K_d] and keys[pygame.K_w]:
+      player.last_face = player.face
       player.face = 1
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x += player.vel_gain
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y -= player.vel_gain
     elif keys[pygame.K_d] and keys[pygame.K_s]:
+      player.last_face = player.face
       player.face = 3
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x += player.vel_gain
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y += player.vel_gain
     elif keys[pygame.K_a] and keys[pygame.K_s]:
+      player.last_face = player.face
       player.face = 5
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x -= player.vel_gain
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y += player.vel_gain
     elif keys[pygame.K_a] and keys[pygame.K_w]:
+      player.last_face = player.face
       player.face = 7
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x -= player.vel_gain
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y -= player.vel_gain
     elif keys[pygame.K_d]:
+      player.last_face = player.face
       player.face = 2
       player.decay('y')
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x += player.vel_gain
     elif keys[pygame.K_a]:
+      player.last_face = player.face
       player.face = 6
       player.decay('y')
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x -= player.vel_gain
     elif keys[pygame.K_w]:
+      player.last_face = player.face
       player.face = 0
       player.decay('x')
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y -= player.vel_gain
     elif keys[pygame.K_s]:
+      player.last_face = player.face
       player.face = 4
       player.decay('x')
       if abs(player.vel_y) <= player.max_speed:

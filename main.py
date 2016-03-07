@@ -4,17 +4,19 @@ from lib.Player           import *
 from lib.InputHandler     import *
 from config.client_config import *
 from config.server_config import *
+from lib.Level            import *
 
 pygame.init()
 pygame.display.set_caption("Citadel 0.0.1a Testing")
 screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 screen.fill(WHITE)
+level = Level(1,'test',SCREENHEIGHT,SCREENWIDTH)
 
 def run():
 
   avatar = random.choice(glob.glob(AVATARS + "*.png"))
   name = get_player_name()
-  player = Player(SCREENWIDTH/2, SCREENHEIGHT/2, avatar, name)
+  player = Player(SCREENWIDTH, SCREENHEIGHT, avatar, name)
   client = MastermindClientTCP(5.0, 10.0) # connection timeout, receive timeout
 
   try:
@@ -46,7 +48,7 @@ def run():
     display_text(screen, 28, "Citadel 0.0.1a", SCREENWIDTH  - 75, SCREENHEIGHT) # Version caption
     Entity.List.draw(screen)
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(60)
 
   client.disconnect()
   pygame.quit()
