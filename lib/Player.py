@@ -39,22 +39,22 @@ class Player(Entity):
     self.align_image_with_direction()
    
   def align_image_with_direction(self):
-    if self.face == 0:
+    if self.face == 0: #up
       self.image = pygame.transform.rotate(self.base_image, 90)
-    elif self.face == 1:
+    elif self.face == 1: #up-right
       self.image = pygame.transform.rotate(self.base_image, 45)
-    elif self.face == 2:
+    elif self.face == 2: #right
       self.image = self.base_image
-    elif self.face == 3:
+    elif self.face == 3: #down-right
       self.image = pygame.transform.rotate(self.base_image, 315)
-    elif self.face == 4:
+    elif self.face == 4: #down
       self.image = pygame.transform.rotate(self.base_image, 270)
-    elif self.face == 5:
+    elif self.face == 5: #down-left
       self.image = pygame.transform.flip(self.base_image, True, False)
       self.image = pygame.transform.rotate(self.image, 45)
-    elif self.face == 6:
+    elif self.face == 6: #left
       self.image = pygame.transform.flip(self.base_image, True, False)
-    elif self.face == 7:
+    elif self.face == 7: #up-left
       self.image = pygame.transform.flip(self.base_image, True, False)
       self.image = pygame.transform.rotate(self.image, 315)
 
