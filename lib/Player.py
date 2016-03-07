@@ -33,13 +33,13 @@ class Player(Entity):
     elif self.face == 4:
       self.image = pygame.transform.rotate(self.base_image, 270)
     elif self.face == 5:
-      self.image = pygame.transform.flip(self.base_image, True, False)
-      self.image = pygame.transform.rotate(self.image, 45)
+      self.image = pygame.transform.rotate(pygame.transform.flip(
+        self.base_image, True, False), 45)
     elif self.face == 6:
       self.image = pygame.transform.flip(self.base_image, True, False)
     elif self.face == 7:
-      self.image = pygame.transform.flip(self.base_image, True, False)
-      self.image = pygame.transform.rotate(self.image, 315)
+      self.image = pygame.transform.rotate(pygame.transform.flip(
+        self.base_image, True, False), 315)
     
     if self.health <= 0:
       die()
