@@ -19,10 +19,18 @@ class Player(Entity):
     self.vel_gain = 6
     self.vel_decay = 3
     
-  def update(self):
+  def client_update(self):
     self.rect.x += self.vel_x
     self.rect.y += self.vel_y
-    if self.face == 0:
+    align_image_with_direction()
+
+  def server_update(self, x, y):
+    self.rect.x += self.vel_x
+    self.rect.y += self.vel_y
+    align_image_with_direction()
+   
+  def align_image_with_direction(self):
+     if self.face == 0:
       self.image = pygame.transform.rotate(self.base_image, 90)
     elif self.face == 1:
       self.image = pygame.transform.rotate(self.base_image, 45)
@@ -40,9 +48,6 @@ class Player(Entity):
     elif self.face == 7:
       self.image = pygame.transform.flip(self.base_image, True, False)
       self.image = pygame.transform.rotate(self.image, 315)
-    
-    if self.health <= 0:
-      die()
 
   def destroy():
     classes.Player.List.remove(self)
