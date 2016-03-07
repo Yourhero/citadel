@@ -20,6 +20,15 @@ class Player(Entity):
     self.vel_decay = 3
     
   def client_update(self):
+    if self.vel_x > self.max_speed:
+      self.vel_x = self.max_speed
+    elif self.vel_x < -self.max_speed:
+      self.vel_x = -self.max_speed
+    if self.vel_y > self.max_speed:
+      self.vel_y = self.max_speed
+    elif self.vel_y < -self.max_speed:
+      self.vel_y = -self.max_speed
+      
     self.rect.x += self.vel_x
     self.rect.y += self.vel_y
     self.align_image_with_direction()

@@ -55,7 +55,7 @@ class InputHandler():
       if abs(player.vel_x) <= player.max_speed:
         player.vel_x -= player.vel_gain
     elif keys[pygame.K_w]:
-      player.face += 0
+      player.face = 0
       player.decay('x')
       if abs(player.vel_y) <= player.max_speed:
         player.vel_y -= player.vel_gain
