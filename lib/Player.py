@@ -14,7 +14,7 @@ class Player(Entity):
     Player.List.add(self)
     self.health = 100
     self.name   = name
-    self.face = 0
+    self.face = 2
     self.max_speed = 20
     self.vel_gain = 6
     self.vel_decay = 3
