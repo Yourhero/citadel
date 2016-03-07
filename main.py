@@ -4,11 +4,13 @@ from lib.Player           import *
 from lib.InputHandler     import *
 from config.client_config import *
 from config.server_config import *
+from lib.Level            import *
 
 pygame.init()
 pygame.display.set_caption("Citadel 0.0.1a Testing")
 screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 screen.fill(WHITE)
+level = Level(1,'test',SCREENHEIGHT,SCREENWIDTH)
 
 def run():
 
