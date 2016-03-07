@@ -61,6 +61,3 @@ class Player(Entity):
        # self.vel_y -= self.vel_decay
       #elif self.vel_y < 0:
        # self.vel_y += self.vel_decay
-        
-      
-  

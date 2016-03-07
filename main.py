@@ -1,39 +1,55 @@
 import pygame, sys, random, os, eztext, glob
-from lib.Player import *
-from lib.InputHandler  import *
+from Mastermind           import *
+from lib.Player           import *
+from lib.InputHandler     import *
+from config.client_config import *
+from config.server_config import *
 
 pygame.init()
-
-BLACK = (  0,   0,   0)
-RED   = (255,   0,   0)
-GREEN = (  0, 255,   0)
-BLUE  = (  0,   0, 255)
-WHITE = (255, 255, 255)
-
-SCREENWIDTH, SCREENHEIGHT = 1200, 800
-
-ASSETS      = 'assets/'
-AVATARS     = ASSETS + 'avatars/'
-PROJECTILES = ASSETS + 'projectiles/'
-
+pygame.display.set_caption("Citadel 0.0.1a Testing")
 screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 screen.fill(WHITE)
 
 def run():
-  clock = pygame.time.Clock()
+
   avatar = random.choice(glob.glob(AVATARS + "*.png"))
   name = get_player_name()
   player = Player(SCREENWIDTH/2, SCREENHEIGHT/2, avatar, name)
+  client = MastermindClientTCP(5.0, 10.0) # connection timeout, receive timeout
 
-  while True:
-    clock.tick(30)
+  try:
+    client.connect(SERVER_ADDRESS, SERVER_PORT)
+  except MastermindError:
+    # server not up?
+    pass
+
+  client.send(['login', name, avatar], None)
+  if client.receive(False)[0] == "success":
+    connected = True
+    clock = pygame.time.Clock()
+
+  while connected:
     InputHandler.handle_keyboard(player)
-    player.update()
+    old_pos = [player.rect.x, player.rect.y]
+    player.client_update()
+    new_pos = [player.rect.x, player.rect.y]
+    if old_pos[0] != new_pos[0] or old_pos[1] != new_pos[1]:
+      client.send(['update', name, player.rect.x, player.rect.y], None)
+      state = client.receive(True) # false = non-blocking
+      print "The state: " + str(state)
+      if state[0] == 'move':
+        player.server_update(state[1], state[2])
+    else: # player hasn't moved
+      pass
     screen.fill(WHITE)    
-    display_text(screen, 28, "echo: " + name, SCREENWIDTH/4, SCREENHEIGHT/4) # Echo user input
+    display_text(screen, 28, "echo: " + name, 10, 10) # Echo user input
     display_text(screen, 28, "Citadel 0.0.1a", SCREENWIDTH  - 75, SCREENHEIGHT) # Version caption
     Entity.List.draw(screen)
     pygame.display.flip()
+    clock.tick(30)
+
+  client.disconnect()
+  pygame.quit()
 
 def get_player_name():
   named = False
