@@ -50,15 +50,17 @@ class Player(Entity):
   
   def decay(self, vector):
     if vector == 'x':
-      if self.vel_x > 0:
-        self.vel_x -= self.vel_decay
-      elif self.vel_x < 0:
-        self.vel_x += self.vel_decay
+      self.vel_x = 0
+      #if self.vel_x > 0:
+       # self.vel_x -= self.vel_decay
+      #elif self.vel_x < 0:
+       # self.vel_x += self.vel_decay
     elif vector == 'y':
-      if self.vel_y > 0:
-        self.vel_y -= self.vel_decay
-      elif self.vel_y < 0:
-        self.vel_y += self.vel_decay
+      self.vel_y = 0
+      #if self.vel_y > 0:
+       # self.vel_y -= self.vel_decay
+      #elif self.vel_y < 0:
+       # self.vel_y += self.vel_decay
         
       
   
