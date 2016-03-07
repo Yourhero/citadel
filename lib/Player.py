@@ -25,8 +25,8 @@ class Player(Entity):
     self.align_image_with_direction()
 
   def server_update(self, x, y):
-    self.rect.x += x
-    self.rect.y += y
+    self.rect.x = x
+    self.rect.y = y
     self.align_image_with_direction()
    
   def align_image_with_direction(self):
