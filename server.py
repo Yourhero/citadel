@@ -37,7 +37,6 @@ class CitadelServer(MastermindServerTCP):
     self.players[username]['x_pos'] = x
     self.players[username]['y_pos'] = y
     print "Player: " + username + " pos X: " + str(x) + " Y: " + str(y) + " Vel X: " + str(x_vel) + " Y: " + str(y_vel)
-    print " "
     self.mutex.release()
 
   def callback_connect(self):
