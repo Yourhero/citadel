@@ -16,7 +16,7 @@ def run():
 
   avatar = random.choice(glob.glob(AVATARS + "*.png"))
   name = get_player_name()
-  player = Player(SCREENWIDTH, SCREENHEIGHT, avatar, name)
+  player = Player(SCREENWIDTH/2, SCREENHEIGHT/2, avatar, name)
   client = MastermindClientTCP(5.0, 10.0) # connection timeout, receive timeout
 
   try:
@@ -48,7 +48,7 @@ def run():
     display_text(screen, 28, "Citadel 0.0.1a", SCREENWIDTH  - 75, SCREENHEIGHT) # Version caption
     Entity.List.draw(screen)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(30)
 
   client.disconnect()
   pygame.quit()
