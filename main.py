@@ -61,8 +61,8 @@ def run():
           print "Skipping creating ourselves twice..."
     
     if isinstance(state, dict):
-      for player in Player.list:
-        player.server_update(state[player]['x_pos'], state[player['y_pos']])
+      for player in Player.List:
+        player.server_update(state[player.name]['x_pos'], state[player.name]['y_pos'])
 
     ## LOCAL CLIENT DRAW ##
     screen.fill(WHITE)    
