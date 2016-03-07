@@ -17,11 +17,15 @@ class Player(Entity):
     self.name   = name
 
 
-  def update(self):
+  def client_update(self):
     self.rect.x += self.vel_x
     self.rect.y += self.vel_y
     if self.health <= 0:
       die()
+
+  def server_update(self, x, y):
+    self.rect.x = x
+    self.rect.y = y
 
   def destroy():
     classes.Player.List.remove(self)

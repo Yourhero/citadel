@@ -1,0 +1,3 @@
+SERVER_ADDRESS = "localhost"
+SERVER_PORT    = 8930
+MAX_CLIENTS    = 10
